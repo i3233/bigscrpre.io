@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大屏应用</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 安装界面 -->
+    <div id="install-screen" class="screen active">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">📺</div>
+                <h1>大屏应用安装</h1>
+            </div>
+            <div class="install-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">准备安装...</div>
+            </div>
+            <div class="install-status" id="install-status">
+                <div class="status-item">✓ 检查系统环境</div>
+                <div class="status-item" id="status-download">⏳ 下载应用文件</div>
+                <div class="status-item" id="status-install">⏳ 安装应用</div>
+                <div class="status-item" id="status-config">⏳ 配置应用</div>
+                <div class="status-item" id="status-complete">⏳ 完成安装</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 绑定界面 -->
+    <div id="bind-screen" class="screen">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🔗</div>
+                <h1>设备绑定</h1>
+            </div>
+            <div class="bind-content">
+                <div class="screen-id">
+                    <h2>大屏ID</h2>
+                    <div class="id-display" id="screen-id">BS-2024-001</div>
+                    <button class="copy-btn" onclick="copyScreenId()">复制ID</button>
+                </div>
+                <div class="bind-form">
+                    <h3>请输入后台验证码</h3>
+                    <input type="text" id="bind-code" placeholder="请输入验证码" maxlength="6">
+                    <button class="bind-btn" onclick="bindDevice()">绑定设备</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置界面 -->
+    <div id="settings-screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1>大屏设置</h1>
+                <div class="exit-hint">左上角连续点击8下，再点击右上角8下退出应用</div>
+            </div>
+            <div class="settings-content">
+                <div class="setting-group">
+                    <h3>网络设置</h3>
+                    <div class="setting-item">
+                        <label>WiFi连接</label>
+                        <select id="wifi-select">
+                            <option value="">选择WiFi网络</option>
+                            <option value="wifi1">Office_WiFi</option>
+                            <option value="wifi2">Guest_WiFi</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>WiFi密码</label>
+                        <input type="password" id="wifi-password" placeholder="输入WiFi密码">
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>启动设置</h3>
+                    <div class="setting-item">
+                        <label>开机自启动</label>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-start" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>自动更新</label>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-update">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>显示设置</h3>
+                    <div class="setting-item">
+                        <label>屏幕亮度</label>
+                        <input type="range" id="brightness" min="0" max="100" value="80">
+                        <span id="brightness-value">80%</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>自动休眠</label>
+                        <select id="sleep-time">
+                            <option value="0">从不</option>
+                            <option value="5">5分钟</option>
+                            <option value="15">15分钟</option>
+                            <option value="30">30分钟</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>系统设置</h3>
+                    <div class="setting-item">
+                        <label>时区设置</label>
+                        <select id="timezone">
+                            <option value="Asia/Shanghai">中国标准时间 (UTC+8)</option>
+                            <option value="Asia/Tokyo">日本标准时间 (UTC+9)</option>
+                            <option value="America/New_York">美国东部时间 (UTC-5)</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>语言设置</label>
+                        <select id="language">
+                            <option value="zh-CN">简体中文</option>
+                            <option value="en-US">English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="saveSettings()">保存设置</button>
+                <button class="btn-primary" onclick="startDisplay()">开始运行</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 运行界面 -->
+    <div id="display-screen" class="screen">
+        <div class="display-header">
+            <div class="time-display" id="current-time">2024-01-01 12:00:00</div>
+            <div class="weather-display" id="weather">北京 晴天 25°C</div>
+        </div>
+        
+        <div class="display-content">
+            <div class="main-content">
+                <div class="welcome-message">
+                    <h1>欢迎使用大屏系统</h1>
+                    <p>大屏ID: <span id="display-screen-id">BS-2024-001</span></p>
+                </div>
+                
+                <!-- 替换功能卡片为说明文字 -->
+                <div class="virtual-screen-info" style="margin: 0 auto; font-size: 1.2em; line-height: 2; text-align: left; max-width: 800px; width: 100%; white-space: normal; display: block;">
+                    <p style="font-weight:bold;">虚拟大屏交互界面</p>
+                    <p>您当前看到的是：PC端内容管理系统制作的节目内容</p>
+                    <p>支持触摸点击查看详情</p>
+                    <p style="font-weight:bold; margin-top:1em;">特殊操作区域：</p>
+                    <p>1. 进入设置：同时连续点击屏幕 <b>左上角 4 次</b> 与 <b>右上角 4 次</b></p>
+                    <p>2. 退出应用：同时连续点击屏幕 <b>左上角 8 次</b> 与 <b>右上角 8 次</b></p>
+                    <p style="margin-top:1em;">注意：此界面为虚拟大屏演示，内容随PC端管理更新。开机后将自动运行本应用。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="display-footer">
+            <div class="status-bar">
+                <span class="status-item">WiFi: 已连接</span>
+                <span class="status-item">信号: 强</span>
+                <span class="status-item">电量: 100%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成功提示 -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <div class="success-icon">✅</div>
+            <h2>绑定成功</h2>
+            <p>设备已成功绑定到后台系统</p>
+            <button onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
